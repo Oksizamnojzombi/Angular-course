@@ -3,6 +3,10 @@ export class ImageUI {
         this._imageContainer = document.querySelector(".images-wrap .row");
     }
 
+    /**
+     * вставка изображения в разметку
+     * @param {file} image - изображение 
+     */
     addImage(image) {
         const template = ImageUI._createImageTemplate(image);
         this._imageContainer.insertAdjacentHTML("afterbegin", template);
@@ -12,10 +16,20 @@ export class ImageUI {
         
     }
 
+    /**
+     * очистка разметки
+     */
     clearContainer() {
         this._imageContainer.innerHTML = "";
     }
 
+    /**
+     * создание разметки для дальнейшего вывода изображения
+     * @param {string} url -адресс
+     * @param {object} views - количество просмотров
+     * @param {object} likes количество лайков
+     * @param {string} _id идентификатор  
+     */
     static _createImageTemplate({url, views, likes, _id}) {
         return `
         <div class="col-4 col">

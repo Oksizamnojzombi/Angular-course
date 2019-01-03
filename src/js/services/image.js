@@ -1,5 +1,8 @@
 import { env } from './../config/env';
 
+/**
+ * ImageService - сервис о получении данных об изображении с сервера
+ */
 export class ImageService {
     remove(id) {
 

@@ -1,3 +1,6 @@
+/**
+ * ImageModal - класс обработки данных изображения и выведения их в модальное окно
+ */
 export class ImageModal {
     constructor() {
         this._imageInfoContainer = document.querySelector("#imageModal .current-image-info");
@@ -6,6 +9,10 @@ export class ImageModal {
         this._loader = document.getElementById("loading");
     }
 
+    /**
+     * renderInfo - иницыализирует все методы класса
+     * @param {Object} image - совокупная информация о картинке
+     */
     renderInfo(image) {
         this.clearModal();
         this.setBaseInfo(image);
@@ -18,11 +25,19 @@ export class ImageModal {
         this._loader.classList.toggle("hidden");
     }
 
+    /**
+     * setBaseInfo - заполнение дынных верхнего информационного окна картинки в модальном разделе
+     * @param {Object} image - изображение
+     */
     setBaseInfo(image) {
         const template = ImageModal._basicInfoTemplate(image);
         this._imageInfoContainer.insertAdjacentHTML("afterbegin", template);
     }
 
+    /**
+    * setImg -  вставка изображение в макет окна
+    * @param {addres} url  - серверный адресс изображения
+    */
     setImg({url}) {
         this._imgTag.src = url;
     }
@@ -33,10 +48,18 @@ export class ImageModal {
         this._commentContainer.insertAdjacentHTML("afterbegin", template);
     }
 
+    /**
+     * clearModal - очистка информации о изображении модального раздела
+     */
     clearModal() {
         this._imageInfoContainer.innerHTML = "";
     }
 
+    /**
+     * _commentTemplate - вставка отзывов
+     * @param {object} param0  - информация о картинке
+     * @param {*} _id - идентификатор
+     */
     static _commentTemplate({owner, avatar, full_name, text, time_update, sub_comments}, {_id}) {
         const currentUserId = localStorage.getItem("social_user_id");
         const isOwner = currentUserId == owner || currentUserId == _id;

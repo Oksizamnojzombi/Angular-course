@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\css",
+    "\\src\\js",
+    "\\src\\js\\config",
+    "\\src\\js\\controls",
+    "\\src\\js\\guard",
+    "\\src\\js\\modules",
+    "\\src\\js\\services",
+    "\\src\\js\\ui"
+  ],
+  "SelectedNode": "\\src\\index.html",
+  "PreviewInSolutionExplorer": false
+}
