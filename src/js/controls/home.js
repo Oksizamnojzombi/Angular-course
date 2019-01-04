@@ -1,12 +1,14 @@
 import { UserService } from './../services/user';
 import { ImageService } from './../services/image';
 import { CommentService } from './../services/comments';
+import { SearchService } from './../services/search';
 
 import { Message } from './../modules/message';
 
 import { UserUI } from './../ui/user';
 import { ImageUI } from './../ui/image';
 import { ImageModal } from './../ui/imageModal';
+import { SearchUI } from './../ui/search';
 const $ = require('jquery');
 
 
@@ -18,7 +20,7 @@ export function HomePage() {
     // Comments Service
     const commentService = new CommentService();
     // Search Service
-    //const serchService = new SearchService();
+    const serchService = new SearchService();
     // Init User UI
     const userUI = new UserUI();
     //init Image Service
@@ -28,7 +30,7 @@ export function HomePage() {
     // Init Image Modal
     const imageModal = new ImageModal();
     // Init Image Modal
-    //const searchUI = new SearchUI();
+    const searchUI = new SearchUI();
     // Init Message Module
     const message = new Message();
 
@@ -41,8 +43,8 @@ export function HomePage() {
     const commentInput = addComments.elements["comment"];
     const commentWraper = document.querySelector(".current-image-comments-wrap");
     const formSeach = document.forms["searchForm"];
-    //const inputSearch = formSeach.elements["search"];
-    //const searchWraper = document.querySelector(".search-result");
+    const inputSearch = formSeach.elements["search"];
+    const searchWraper = document.querySelector(".search-result");
     const logButton = document.querySelector(".btn-outline-danger");
 
 
@@ -191,6 +193,25 @@ export function HomePage() {
         }
     }
 
+    /**
+     * searchHandler - поиск пользователей в момент ввода в поле инпута данных
+     * @param {any} e - событие
+     */
+    function searchHandler(e) {
+        e.preventDefault();
+
+        const userName = inputSearch.value;
+        if (userName.length >= 3) {
+            serchService.serchPeople(userName)
+                .then((data) => {
+                    searchWraper.classList.remove("hide");
+                    searchUI.clearContainer();
+                    data.forEach((info) => searchUI.addSerch(info));
+                })
+                .catch((error) => console.log(error));
+        }
+    }
+
     function logautSistem(e) {
         localStorage.clear();
         window.location = "login.html";
@@ -213,12 +234,16 @@ export function HomePage() {
 
 
     // Events
+    inputSearch.addEventListener("blur", e => {
+        searchWraper.classList.add("hide");
+        formSeach.reset()
+    });
     window.addEventListener("load", onLoad);
     inputCover.addEventListener("change", onCoverUpload);
     inputUploadPhoto.addEventListener("change", onloadingPhoto);
     elementImgRow.addEventListener('click', deletePhoto);
     addComments.addEventListener("submit", addComment);
     commentWraper.addEventListener("click", deleteComment);
-    //formSeach.addEventListener("submit", searchHandler);
+    formSeach.addEventListener("submit", searchHandler);
     logButton.addEventListener("click", logautSistem);
 }

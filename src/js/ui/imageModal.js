@@ -4,9 +4,11 @@
 export class ImageModal {
     constructor() {
         this._imageInfoContainer = document.querySelector("#imageModal .current-image-info");
+        this._imageCommentsWrap = document.querySelector(".current-image-comments-wrap");
         this._imgTag = document.querySelector(".current-image img");
         this._commentContainer = document.querySelector(".current-image-comments-wrap");
         this._loader = document.getElementById("loading");
+        this._form = document.forms["addComments"];
     }
 
     /**
