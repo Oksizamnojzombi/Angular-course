@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 <body>
+    <div class="header">
+        <div class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Navbar</a>
+
+            <form name="searchForm" class="form-inline my-2 ml-auto my-lg-0">
+                <input class="form-control mr-sm-2" type="search" id="search" placeholder="Search" aria-label="Search">
+            </form>
+            <button class="btn btn-outline-danger ml-2">Logout</button>
+        </div>
+        <div class="search-result hide"></div>
+        <!-- /.search-result -->
+    </div>
     <div class="user-cover">
         <div class="container position-relative h-100">
             <label for="coverImg" class="change-cover-btn">
@@ -19,19 +31,26 @@
     </div>
     <!-- /.user-cover -->
     <div class="user-navbar">
-       <div class="container d-flex justify-content-center">
-           <div class="user-ava"></div>
-           <!-- /.user-ava -->
-       </div>
-       <!-- /.container --> 
-       <div class="container mt-3">
-           <h4 class="user-name text-center"></h4>
-       </div>
-       <!-- /.container -->
+        <div class="container d-flex justify-content-center">
+            <div class="user-ava"></div>
+            <!-- /.user-ava -->
+        </div>
+        <!-- /.container -->
+        <div class="container mt-3">
+            <h4 class="user-name text-center"></h4>
+        </div>
+        <!-- /.container -->
     </div>
     <!-- /.user-navbar -->
     <div class="images-wrap mt-4">
-        <div class="container">
+        <div class="container mt-4">
+            <label for="userPhotos" class="upload-photos text-center">
+                <span>+ Upload photos</span>
+                <input type="file" name="userPhotos" id="userPhotos" multiple>
+            </label>
+            <!-- /.upload-photos -->
+        </div>
+        <div class="container mt-4">
             <div class="row"></div>
             <!-- /.row -->
         </div>
@@ -46,7 +65,7 @@
                     <div id="loading-center-absolute">
                         <div id="object"></div>
                     </div>
-                </div> 
+                </div>
             </div>
             <div class="modal-content">
                 <div class="modal-body">
@@ -59,9 +78,9 @@
                     <div class="current-image-comments-wrap mt-3"></div>
                     <!-- /.current-image-comments-wrap -->
                     <div class="add-comment-form mt-4">
-                        <form>
+                        <form name="addComments" data-comment-id="" novalidate>
                             <input type="text" name="comment" id="comment" placeholder="Write a comment" class="form-control form-control-sm">
-                            <button type="submit" class="btn btn-primary btn-sm mt-3">Submit</button>
+                            <button data-class="addComment" type="submit" class="btn btn-primary btn-sm mt-3">Submit</button>
                         </form>
                     </div>
                     <!-- /.add-comment-form mt-4 -->

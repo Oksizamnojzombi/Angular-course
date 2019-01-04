@@ -1,6 +1,7 @@
 {
   "ExpandedNodes": [
     "",
+    "\\dist",
     "\\src",
     "\\src\\css",
     "\\src\\js",
@@ -8,9 +9,8 @@
     "\\src\\js\\controls",
     "\\src\\js\\guard",
     "\\src\\js\\modules",
-    "\\src\\js\\services",
-    "\\src\\js\\ui"
+    "\\src\\js\\services"
   ],
-  "SelectedNode": "\\src\\index.html",
+  "SelectedNode": "\\src\\js\\services\\user.js",
   "PreviewInSolutionExplorer": false
 }

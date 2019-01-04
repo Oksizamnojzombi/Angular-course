@@ -17,8 +17,14 @@ export class ImageModal {
         this.clearModal();
         this.setBaseInfo(image);
         this.setImg(image);
+        this.setIdComment(image);
         this.setComments(image);
         this.loaderToggle();
+    }
+
+    setNewComments(comments) {
+        this.clearComent();
+        this.setComments(comments);
     }
 
     loaderToggle() {
@@ -40,6 +46,10 @@ export class ImageModal {
     */
     setImg({url}) {
         this._imgTag.src = url;
+    }
+
+    setIdComment({ _id }) {
+        this._form.dataset.commentId = _id
     }
 
     setComments({comments, owner}) {

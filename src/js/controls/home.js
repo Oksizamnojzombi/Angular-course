@@ -1,5 +1,9 @@
 import { UserService } from './../services/user';
 import { ImageService } from './../services/image';
+import { CommentService } from './../services/comments';
+
+import { Message } from './../modules/message';
+
 import { UserUI } from './../ui/user';
 import { ImageUI } from './../ui/image';
 import { ImageModal } from './../ui/imageModal';
@@ -7,23 +11,39 @@ const $ = require('jquery');
 
 
 export function HomePage() {
-    // Init User Service
+    // Init User service
     const user = new UserService();
-    //Image Servise
+    // Image Service
     const imageService = new ImageService();
+    // Comments Service
+    const commentService = new CommentService();
+    // Search Service
+    //const serchService = new SearchService();
     // Init User UI
     const userUI = new UserUI();
+    //init Image Service
+    const image = new ImageService();
     // Init Image UI
     const imageUI = new ImageUI();
     // Init Image Modal
     const imageModal = new ImageModal();
+    // Init Image Modal
+    //const searchUI = new SearchUI();
+    // Init Message Module
+    const message = new Message();
+
     // UI elements
+    const elementImgRow = document.querySelector(".row");
+    const imageWrap = document.querySelector(".images-wrap");
     const inputCover = document.getElementById("coverImg");
-    const inputUserPhotos = document.getElementById("userPhotos");
-    const imgWrapper = document.querySelector("div.images-wrap");
-    const modal = document.querySelector("div.modal-body");
-    const inputSearch = document.querySelector("input.form-control");
-    const btnLogout = document.getElementById("loguot");
+    const inputUploadPhoto = document.getElementById("userPhotos");
+    const addComments = document.forms["addComments"];
+    const commentInput = addComments.elements["comment"];
+    const commentWraper = document.querySelector(".current-image-comments-wrap");
+    const formSeach = document.forms["searchForm"];
+    //const inputSearch = formSeach.elements["search"];
+    //const searchWraper = document.querySelector(".search-result");
+    const logButton = document.querySelector(".btn-outline-danger");
 
 
     /**
@@ -35,6 +55,7 @@ export function HomePage() {
     function onLoad(e) {
         user.getInfo()
             .then((data) => {
+                userUI.clearContainer();
                 userUI.renderUserInfo(data);
                 return data;
             })
@@ -48,37 +69,6 @@ export function HomePage() {
     }
 
     /**
-     * onSearch - обработчик панели поиска пользоватеей, отправляет запрос с инициаламы пользователя, прередает
-     * ответ сервера на контроллер вывода, контролирует открытие графического интерфейса окна с результатами
-     * @param {Event} e - внесение значений в строку поиска
-     */
-    function onSearch(e) {
-        e.preventDefault();
-
-        if (e.target.value.length > 2) {
-            user.sendSearchQuery(e.target.value)
-                .then((data) => {
-                    userUI.controllerSearchingUserInfo(data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else if (!document.querySelector("div.search-result").classList.contains('d-none') && e.target.value.length < 3) {
-            document.querySelector("div.search-result").classList.toggle('d-none');
-        }
-    }
-
-    /**
-     * logout -  обработчик выхода с профайла
-     * @param {Event} e - клик по кнопке логаута
-     */
-    function logout(e) {
-        localStorage.removeItem("social_user_id");
-        localStorage.removeItem("social_user_token");
-        window.location = "login.html";
-    }
-
-    /**
      * onCoverUpload - обработчик на событие загрузки файла спроверкой состояния, и передачей на
      * user.uploadCover он запрашивает обновленную информацию, распарсивает ее и устанавливает новый
      * фон
@@ -89,7 +79,7 @@ export function HomePage() {
             const [newCover] = inputCover.files;
             user.uploadCover(newCover)
                 .then(user.getInfo)
-                .then((data) => userUI.setCover(data.cover))
+                .then((data) => userUI.setUserCover(data.cover))
                 .catch((error) => {
                     console.log(error);
                 });
@@ -100,57 +90,113 @@ export function HomePage() {
      * onPhotosUpload -  обработчик отправки пользовательских изображаний с выводом изображения
      * @param {Event} e 
      */
-    function onPhotosUpload(e) {
-        e.stopPropagation();
-
-        if (inputUserPhotos.files.length) {
-            const userPhoto = inputUserPhotos.files;
-            const arrFiles = [];
-            for (let kay in userPhoto) {
-                if (isFinite(kay)) {
-                    arrFiles.push(userPhoto[kay]);
-                }
-            }
-            arrFiles.forEach((photo) => {
-                user.loadPhoto(photo)
-                    .then(user.getInfo)
-                    .then((data) => {
-                        userUI.renderUserInfo(data);
-                        return data;
-                    })
-                    .then((data) => {
-                        imageUI.clearContainer();
-                        data.my_images.forEach((img) => imageUI.addImage(img));
-                    })
-            })
+    function onloadingPhoto(e) {
+        if (inputUploadPhoto.files.length) {
+            const [newPhoto] = inputUploadPhoto.files;
+            image.loadingPhoto(newPhoto)
+                .then(() => onLoad())
+                .catch((error) => console.log(error));
         }
     }
 
     /**
-     * imageOpertion  - обработчик оперций с картинками пользователя
-     * @param {Event} e  - клик по полю в котором размещены изображения пользователя
+     * deletePhoto - удаление фото с сервера
+     * @param {Event} e - co,anbt
      */
-    function imageOpertion(e) {
-        e.stopPropagation();
+    function deletePhoto(e) {
 
-        if (e.target.classList.contains("fa-trash-alt")) {
-            const imgId = e.target.closest("[data-img-id]").dataset.imgId;
-            const imgUrlParametr = e.target.closest("[data-img-id]").querySelector("img").src.slice(80);
-            const confirmation = confirm(`Действительно удалить изображение № ${imgId}?`);
-            if (confirmation) {
-                user.deletePhoto(imgId, imgUrlParametr)
-                    .then(user.getInfo)
-                    .then((data) => {
-                        userUI.renderUserInfo(data);
-                        return data;
-                    })
-                    .then((data) => {
-                        imageUI.clearContainer();
-                        data.my_images.forEach((img) => imageUI.addImage(img));
-                    })
+        if (e.target.closest('.remove-wrap')) {
+            // UI elements
+            const imgSrc = e.target.offsetParent.previousElementSibling;
+            const imgWrap = e.target.offsetParent.previousElementSibling.parentElement;
+
+            let questionDelete = confirm('Вы точно хотите удалить ето фото ?');
+
+            if (questionDelete) {
+                // elements imgID - id photo, imgUrl - url photo
+                const imgId = imgWrap.dataset.imgId;
+                const imgUrl = imgSrc.currentSrc.split('/')[5];
+                image.removePhoto(imgId, imgUrl);
             }
-        };
+            user.getInfo()
+                .then(() => onLoad())
+                .catch((error) => console.log(error));
+        }
+    }
 
+    /**
+     * addComment - добавление коментариев пользователем
+     * @param {any} e - событие
+     */
+    function addComment(e) {
+        e.preventDefault();
+
+        const idComment = addComments.dataset.commentId;
+        const commentText = commentInput.value;
+        commentService.addComment(idComment, commentText);
+        imageService.getInfo(idComment)
+            .then((data) => imageModal.setNewComments(data))
+            .catch((error) => {
+                console.log(error);
+            });
+        addComments.reset()
+    }
+
+    /**
+     * deleteComment - Редактирование и удаление коментариев
+     * @param {any} e
+     */
+    function deleteComment(e) {
+        if (e.target.closest(".fa-trash-alt")) {
+            let commentDelete = confirm('удалить коментарий ?');
+            if (commentDelete) {
+                const idImg = e.target.parentElement.dataset.imgId;
+                const idComments = e.target.parentElement.dataset.commentid;
+
+                $('#imageModal').modal('toggle');
+                commentService.deleteComment(idImg, idComments)
+                    .then((res) => message.show({ text: res.message, error: res.error }))
+                    .catch((error) => console.log(error));
+                imageService.getInfo(idImg)
+                    .then((data) => imageModal.setNewComments(data))
+                    .catch((error) => console.log(error));
+
+                setTimeout(function () {
+                    let messageContainer = document.querySelector(".message-container");
+                    messageContainer.parentNode.removeChild(messageContainer);
+                }, 3000)
+            }
+            message.init();
+        }
+        if (e.target.closest(".fa-edit")) {
+            let commentEdit = confirm('радактировать коментарий ?');
+            if (commentEdit) {
+                const idComments = e.target.parentElement.dataset.commentId;
+                const commentText = commentInput.value;
+                $('#imageModal').modal('toggle');
+                commentService.editComment(idComments, commentText)
+                    .then((res) => {
+                        if (!res.error) message.show({ text: res.message, error: res.error });
+                        else message.show({ text: res.message, error: res.error });
+                    })
+                    .catch((error) => console.log(error));
+                addComments.reset();
+
+                setTimeout(function () {
+                    let messageContainer = document.querySelector(".message-container");
+                    messageContainer.parentNode.removeChild(messageContainer);
+                }, 3000)
+            }
+            message.init();
+        }
+    }
+
+    function logautSistem(e) {
+        localStorage.clear();
+        window.location = "login.html";
+    }
+
+    imageWrap.addEventListener("click", (e) => {
         if (e.target.classList.contains("on-hover")) {
             const id = e.target.closest("[data-img-id]").dataset.imgId;
             $('#imageModal').modal('toggle');
@@ -160,83 +206,19 @@ export function HomePage() {
                 .catch((error) => {
                     console.log(error);
                 });
-        };
-
-    }
-
-    /**
-     * modalOperations - обработчик операций в модальном окне
-     * @param {Event} e - событие
-     */
-    function modalOperations(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        const imgID = e.target.closest("div.modal-body").querySelector("[data-id]").dataset.id;
-        const newCommentForm = e.target.closest("form");
-
-        if (e.target.classList.contains("sendMessage")) {
-            user.sendNewComment(imgID, newCommentForm)
-            // .then(
-            //     imageService.getInfo(imgID)
-            //     .then((data) => imageModal.renderInfo(data))
-            //     .catch((error) => {
-            //     console.log(error);
-            //     })
-            // )
-        } else if (e.target.classList.contains("fa-trash-alt")) {
-            const comId = e.target.closest("div.comment-item-details").dataset.commentId;
-            user.deleteComment(comId, imgID);
         }
-        else if (e.target.classList.contains("fa-edit")) {
-            const comIdent = e.target.closest("div.comment-item-details").dataset.commentId;
-            let newMessageForm = e.target.closest("div.comment-item").querySelector("form.newMessage");
-            newMessageForm.classList.toggle("d-none");
-            // newMessageForm.addEventListener('submit', (e) => {
-            //     e.preventDefault();
-            //     user.editComment(comIdent, newMessageForm);
-            // });
+    });
 
-            newMessageForm.querySelector("button.editMessage").addEventListener("click", (e) => {
-                e.preventDefault();
-                user.editComment(comIdent, newMessageForm)
-
-            });
-        }
-    }
+    $('#imageModal').on('hidden.bs.modal', (e) => imageModal.loaderToggle());
 
 
     // Events
     window.addEventListener("load", onLoad);
-
-    /**
-     * присвоение события на кнопку выхода из сайта
-     */
-    btnLogout.addEventListener('click', logout);
-
-    /**
-     * присвоение события на поле поиска
-     */
-    inputSearch.addEventListener("input", onSearch);
-    /**
-     * присвоения события на загрузщик фона
-     */
     inputCover.addEventListener("change", onCoverUpload);
-    /**
-     * присвоение события отправи пользовательского изображения
-     */
-    inputUserPhotos.addEventListener("change", onPhotosUpload);
-
-    /**
-     * присвоение события клика по галерее изображений
-     */
-    imgWrapper.addEventListener("click", imageOpertion);
-
-    /**
-     * присвоение клика на модальное окно
-     */
-    modal.addEventListener("click", modalOperations);
-
-
-    // Remove loader
-    $('#imageModal').on('hidden.bs.modal', (e) => imageModal.loaderToggle());
+    inputUploadPhoto.addEventListener("change", onloadingPhoto);
+    elementImgRow.addEventListener('click', deletePhoto);
+    addComments.addEventListener("submit", addComment);
+    commentWraper.addEventListener("click", deleteComment);
+    //formSeach.addEventListener("submit", searchHandler);
+    logButton.addEventListener("click", logautSistem);
 }

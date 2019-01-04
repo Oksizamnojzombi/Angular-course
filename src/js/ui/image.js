@@ -1,6 +1,6 @@
 export class ImageUI {
     constructor() {
-        this._imageContainer = document.querySelector(".images-wrap .row");
+        this._imagesContainer = document.querySelector(".images-wrap .row");
     }
 
     /**
@@ -8,19 +8,16 @@ export class ImageUI {
      * @param {file} image - изображение 
      */
     addImage(image) {
+        console.log(image);
         const template = ImageUI._createImageTemplate(image);
-        this._imageContainer.insertAdjacentHTML("afterbegin", template);
-    }
-
-    removeImage(id) {
-        
+        this._imagesContainer.insertAdjacentHTML("afterbegin", template);
     }
 
     /**
      * очистка разметки
      */
     clearContainer() {
-        this._imageContainer.innerHTML = "";
+        this._imagesContainer.innerHTML = "";
     }
 
     /**

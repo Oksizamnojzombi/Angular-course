@@ -12,6 +12,10 @@ export class UserUI {
         this._userName = document.querySelector(".user-name");
     }
 
+    clearContainer() {
+        this._userAvatar.innerHTML = "";
+    }
+
     /**
     * renderUserInfo - метод принимающий ответ сервера, разделяет на компонентыинформацию
     * для дальнейшей обработки

@@ -9,6 +9,7 @@ import { AuthGuard } from './guard/auth.guard';
 // Pages
 import { LoginPage } from './controls/login';
 import { HomePage } from './controls/home';
+import { RegisterPage } from './controls/register';
 
 const guard = new AuthGuard();
 
@@ -23,5 +24,9 @@ switch(page) {
     case 'index':
         guard.check(page);
         HomePage();
+        break;
+    case 'register':
+        guard.check(page);
+        RegisterPage();
         break;
 }

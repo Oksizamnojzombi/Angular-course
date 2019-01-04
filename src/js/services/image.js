@@ -1,10 +1,57 @@
 import { env } from './../config/env';
 
-/**
- * ImageService - сервис о получении данных об изображении с сервера
- */
 export class ImageService {
-    remove(id) {
+    constructor() {
+        this._id = localStorage.getItem("social_user_id");
+        this._token = localStorage.getItem("social_user_token");
+    }
+
+    /**
+     * loadingPhoto - метод отправки пользовательских изображений на сервер, через fetch POST FormData
+     * @param {File} photo - загружаемое изображение
+     */
+    loadingPhoto(file) {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append("userPhotos", file);
+
+            if (!this._token || !this._id) return reject("Error. Unauthorized.");
+
+            fetch(`${env.apiUrl}/public/users/upload-photos/${this._id}`, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "x-access-token": this._token
+                }
+            })
+                .then((response) => response.json())
+                .then((data) => resolve(data))
+                .catch((error) => reject(error));
+        });
+    }
+
+    /**
+     * removePhoto -  метод удаления фотографий с запросом к серверу
+     * @param {String} photoId  -  идентефикатор изображения в разметке
+     * @param {String} urlParametr - часть идентефикатора изображения на сервере
+     */
+    removePhoto(imgId, imgUrl) {
+        return new Promise((resolve, reject) => {
+            fetch(`${env.apiUrl}/public/users/remove-photo/${this._id}`, {
+                method: 'DELETE',
+                body: JSON.stringify({
+                    image_id: imgId,
+                    image_url: `users-photos/${imgUrl}`
+                }),
+                headers: {
+                    "Content-type": "application/json",
+                    "x-access-token": this._token
+                }
+            })
+                .then((response) => response.json())
+                .then((data) => resolve(data))
+                .catch((error) => reject(error));
+        });
 
     }
     getInfo(id) {
