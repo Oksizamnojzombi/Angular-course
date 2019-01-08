@@ -1,10 +1,5 @@
 import { env } from './../config/env';
 
-/**
- * UserService - контроллер обратотки информации пользователя
- * @class 
- * 
- */
 export class UserService {
     getInfo() {
         return new Promise((resolve, reject) => {
@@ -28,11 +23,7 @@ export class UserService {
 
 
     /**
-     * uploadCover - метод отправки файла для изменения фона, через Form Data создаем материал для
-     * отправки на сервер, добавляем в него файл и присваиваем эму имя через formData.append("coverImg", file)
-     * достаем данные о реестации из локаьного хранилища и отправляем POST  запрос на сервер с файлом
-     * и хедером "x-access-token": token
-     * @param {File} file - загружаемое изображение 
+     * uploadCover - sending data to the server and uploading photos to the background using the post method
      */
     uploadCover(file) {
         return new Promise((resolve, reject) => {

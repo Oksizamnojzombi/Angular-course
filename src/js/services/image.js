@@ -7,8 +7,8 @@ export class ImageService {
     }
 
     /**
-     * loadingPhoto - метод отправки пользовательских изображений на сервер, через fetch POST FormData
-     * @param {File} photo - загружаемое изображение
+     * loadingPhoto - method of sending custom images to the server
+     * @param file - uploaded image
      */
     loadingPhoto(file) {
         return new Promise((resolve, reject) => {
@@ -31,9 +31,9 @@ export class ImageService {
     }
 
     /**
-     * removePhoto -  метод удаления фотографий с запросом к серверу
-     * @param {String} photoId  -  идентефикатор изображения в разметке
-     * @param {String} urlParametr - часть идентефикатора изображения на сервере
+     * removePhoto -  delete photos with a request to the server
+     * @param  imgId  -  image id in markup
+     * @param  imgUrl - image link on server
      */
     removePhoto(imgId, imgUrl) {
         return new Promise((resolve, reject) => {
@@ -54,6 +54,11 @@ export class ImageService {
         });
 
     }
+
+    /**
+     * getInfo -  getting id for picture
+     * @param  id
+     */
     getInfo(id) {
         return new Promise((resolve, reject) => {
             fetch(`${env.apiUrl}/public/users/image-info/${id}`)

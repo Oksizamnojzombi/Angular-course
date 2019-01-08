@@ -1,11 +1,4 @@
-/**
- * UserUI - класс отображени€ информации пользовател€
- * 
- */
 export class UserUI {
-    /**
-     * конструктор определ€ющий елементы интерфкйса дл€ вывода информации пользовател€
-     */
     constructor() {
         this._cover = document.querySelector(".user-cover");
         this._userAvatar = document.querySelector(".user-ava");
@@ -17,11 +10,10 @@ export class UserUI {
     }
 
     /**
-    * renderUserInfo - метод принимающий ответ сервера, раздел€ет на компонентыинформацию
-    * дл€ дальнейшей обработки
-    * @param {string} avatar - зашифрованное изображение
-    * @param {file} cover - фон
-    * @param {string} full_name - им€ пользовател€
+    * renderUserInfo - method accepting the response of the server, splits the information into components for further processing
+    * @param  avatar - user photo
+    * @param  cover - user defined background
+    * @param  full_name - Username
     */
     renderUserInfo({avatar, cover, full_name}) {
         this.setUserCover(cover);
@@ -30,16 +22,16 @@ export class UserUI {
     }
 
     /**
-    * setUserCover - метод замены фона
-    * @param {*} url - путь к изображению (откуда?)
+    * setUserCover - replace background for user page
+    * @param url - url of the picture
     */
     setUserCover(url) {
         this._cover.style.background = `url("${url}") no-repeat center / cover`;
     }
 
     /**
-    * setAvatar - метод который измен€ет аватар, создает место дл€ отображени€
-    * @param {*} url - путь к изображению
+    * setAvatar - set user profile photo
+    * @param url - path to the picture
     */
     setAvatar(url) {
         const template = `<img src="${url}" alt="">`;
@@ -47,8 +39,8 @@ export class UserUI {
     }
 
     /**
-    * setName -  вставка имени пользовател€ на страницу
-    * @param {String} name - им€ пользовател€
+    * setName -  set username
+    * @param name
     */
     setName(name) {
         this._userName.textContent = name;

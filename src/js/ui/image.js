@@ -4,8 +4,8 @@ export class ImageUI {
     }
 
     /**
-     * вставка изображения в разметку
-     * @param {file} image - изображение 
+     * addImage - Add image to page
+     * @param {file} image
      */
     addImage(image) {
         console.log(image);
@@ -14,18 +14,18 @@ export class ImageUI {
     }
 
     /**
-     * очистка разметки
+     * clearContainer - Cleaning the container from img
      */
     clearContainer() {
         this._imagesContainer.innerHTML = "";
     }
 
     /**
-     * создание разметки для дальнейшего вывода изображения
-     * @param {string} url -адресс
-     * @param {object} views - количество просмотров
-     * @param {object} likes количество лайков
-     * @param {string} _id идентификатор  
+     * _createImageTemplate - Display a custom block to insert an image
+     * @param  url - image link
+     * @param  views - number of views
+     * @param  likes - number of positive ratings for a photo
+     * @param  _id - id
      */
     static _createImageTemplate({url, views, likes, _id}) {
         return `

@@ -5,11 +5,6 @@ export class CommentService {
         this._token = localStorage.getItem("social_user_token");
     }
 
-    /**
-     * addComment - метод отправки нового сообщения
-     * @param {string} imageId - идентификатор изображения
-     * @param {Object} form - форма сообщения
-     */
     addComment(id, commentText) {
         return new Promise((resolve, reject) => {
             fetch(`${env.apiUrl}/public/users/comment/${id}`, {
@@ -29,11 +24,6 @@ export class CommentService {
         });
     }
 
-    /**
-     * deleteComment - метод удаления комментария
-     * @param {string} comId - идентификатор комментария
-     * @param {string} pictureId - идентефикатор изображения
-     */
     deleteComment(idImg, idComments) {
         return new Promise((resolve, reject) => {
             fetch(`${env.apiUrl}/public/users/comment/${idComments}`, {
@@ -52,11 +42,6 @@ export class CommentService {
         });
     }
 
-    /**
-     * editComment- редактирование комментария
-     * @param {*} comId - идентефикатор комметария
-     * @param {*} form - форма с комметаием под изображением
-     */
     editComment(idComments, commentText) {
         return new Promise((resolve, reject) => {
             fetch(`${env.apiUrl}/public/users/comment/${idComments}`, {

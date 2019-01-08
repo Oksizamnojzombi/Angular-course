@@ -6,8 +6,8 @@ export class SearchService {
     }
 
     /**
-     * serchPeople - поиск зарегестрированных пользователей
-     * @param {any} userName - параметр который принимает задаваемое в поиске имя пользователя
+     * serchPeople - Search for users registered in the system
+     * @param {any} userName - match data
      */
     serchPeople(userName) {
         return new Promise((resolve, reject) => {

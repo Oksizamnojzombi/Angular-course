@@ -25,6 +25,10 @@ export function RegisterPage() {
     const regPasswordInput = formReg.elements["password"];
 
     //Login handler
+    /**
+     * submitHandlerRegistration - User registration. Sending data to the server and receiving data about the registered user
+     * @param {e} - event
+     */
     function submitHandlerRegistration(e) {
         e.preventDefault();
 
@@ -42,7 +46,6 @@ export function RegisterPage() {
                 formReg.reset()
             });
     }
-
 
     formReg.addEventListener("submit", submitHandlerRegistration);
 }

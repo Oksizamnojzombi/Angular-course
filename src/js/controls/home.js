@@ -49,10 +49,8 @@ export function HomePage() {
 
 
     /**
-     * onLoad - обработчик события звгрузки страницы, активирует методы экземпляра объекта UserService
-     * данные полученные в ответе сервера отправляются в метод UserUI.renderUserInfo который сепарирует данные
-     * для отображения на странице, очищается темплейт, и вставляются изображения
-     * @param {Event} e 
+     * onLoad - The function that receives user information from the server
+     * @param {e}
      */
     function onLoad(e) {
         user.getInfo()
@@ -71,10 +69,8 @@ export function HomePage() {
     }
 
     /**
-     * onCoverUpload - обработчик на событие загрузки файла спроверкой состояния, и передачей на
-     * user.uploadCover он запрашивает обновленную информацию, распарсивает ее и устанавливает новый
-     * фон
-     * @param {Event} e 
+     * onCoverUpload - The function by which the photo is loaded for the background of the profile
+     * @param {e} - event
      */
     function onCoverUpload(e) {
         if (inputCover.files.length) {
@@ -89,8 +85,8 @@ export function HomePage() {
     }
 
     /**
-     * onPhotosUpload -  обработчик отправки пользовательских изображаний с выводом изображения
-     * @param {Event} e 
+     * onPhotosUpload -  The function by which the photo is loaded into the user profile
+     * @param {e}
      */
     function onloadingPhoto(e) {
         if (inputUploadPhoto.files.length) {
@@ -102,8 +98,8 @@ export function HomePage() {
     }
 
     /**
-     * deletePhoto - удаление фото с сервера
-     * @param {Event} e - co,anbt
+     * deletePhoto - The function by which the photo is removed from the user's page
+     * @param {e}
      */
     function deletePhoto(e) {
 
@@ -112,7 +108,7 @@ export function HomePage() {
             const imgSrc = e.target.offsetParent.previousElementSibling;
             const imgWrap = e.target.offsetParent.previousElementSibling.parentElement;
 
-            let questionDelete = confirm('Вы точно хотите удалить ето фото ?');
+            let questionDelete = confirm('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ ?');
 
             if (questionDelete) {
                 // elements imgID - id photo, imgUrl - url photo
@@ -127,8 +123,8 @@ export function HomePage() {
     }
 
     /**
-     * addComment - добавление коментариев пользователем
-     * @param {any} e - событие
+     * addComment - The function of adding a comment to the picture
+     * @param {e}
      */
     function addComment(e) {
         e.preventDefault();
@@ -145,12 +141,12 @@ export function HomePage() {
     }
 
     /**
-     * deleteComment - Редактирование и удаление коментариев
-     * @param {any} e
+     * deleteComment - The function to delete a comment from under the pictures
+     * @param {e}
      */
     function deleteComment(e) {
         if (e.target.closest(".fa-trash-alt")) {
-            let commentDelete = confirm('удалить коментарий ?');
+            let commentDelete = confirm('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ?');
             if (commentDelete) {
                 const idImg = e.target.parentElement.dataset.imgId;
                 const idComments = e.target.parentElement.dataset.commentid;
@@ -171,7 +167,7 @@ export function HomePage() {
             message.init();
         }
         if (e.target.closest(".fa-edit")) {
-            let commentEdit = confirm('радактировать коментарий ?');
+            let commentEdit = confirm('Delete comment?');
             if (commentEdit) {
                 const idComments = e.target.parentElement.dataset.commentId;
                 const commentText = commentInput.value;
@@ -194,8 +190,8 @@ export function HomePage() {
     }
 
     /**
-     * searchHandler - поиск пользователей в момент ввода в поле инпута данных
-     * @param {any} e - событие
+     * searchHandler - Search for registered users
+     * @param {e}
      */
     function searchHandler(e) {
         e.preventDefault();
@@ -212,6 +208,10 @@ export function HomePage() {
         }
     }
 
+    /**
+     * logautSistem - function for logout
+     * @param {e}
+     */
     function logautSistem(e) {
         localStorage.clear();
         window.location = "login.html";

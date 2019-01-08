@@ -7,9 +7,11 @@ export class SearchUI {
         const template = SearchUI._searchTemplate(info);
         this._searchWraper.insertAdjacentHTML("afterbegin", template);
     }
+
     clearContainer() {
         this._searchWraper.innerHTML = "";
     }
+
     static _searchTemplate({ avatar, city, full_name }) {
         return `
         <div class="owner-info d-flex align-items-center">
